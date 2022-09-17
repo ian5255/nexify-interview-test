@@ -5,10 +5,14 @@ Vue.use(Element);
 
 // or
 import {
-  Select,
   Button,
+  Input,
+  Slider,
+  DatePicker,
   // ...
 } from "element-ui";
 
-Vue.component(Select.name, Select);
-Vue.component(Button.name, Button);
+Vue.component(Button);
+Vue.component(Input);
+Vue.component(Slider);
+Vue.component(DatePicker);

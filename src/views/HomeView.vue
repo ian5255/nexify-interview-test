@@ -14,7 +14,7 @@
       .header-column {{"Birthday"}}
       .header-column {{"Salary"}}
       .header-column {{"Address"}}
-    .body-row(v-for="(data, index) in list" :key="`${data.Name}${index}`")
+    .body-row(v-for="(data, index) in list" :key="`Key${index}`")
       .body-column
         el-input(v-model="data.Name" @input="status.isChange = true")
       .body-column

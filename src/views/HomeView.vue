@@ -77,6 +77,7 @@ export default {
     };
   },
   methods: {
+    // 處理新增
     HandleAdd: debounce(function () {
       console.log(11, this.list);
       this.list.unshift({
@@ -88,9 +89,10 @@ export default {
       this.status.isChange = true;
     }, 200),
 
-    // Save List
+    // 處理儲存
     HandleSave: debounce(async function () {
       let validateResult = true;
+      // 驗證資料
       for (let i = 0; i < this.$refs.ruleForm.length; i++) {
         await this.$refs.ruleForm[i].validate((valid) => {
           if (!valid) {
@@ -99,6 +101,8 @@ export default {
         });
       }
       if (!validateResult) return;
+
+      // 轉換日期格式
       for (const data of this.list) {
         data.DateOfBirth = this.$utils.DayToRfc3339(data.DateOfBirth);
       }
@@ -124,7 +128,7 @@ export default {
         });
     }, 200),
 
-    // Get List
+    // 取得清單資料
     HandleUpdata: debounce(async function () {
       // confirm give up edit
       if (this.status.isChange) {

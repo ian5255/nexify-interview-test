@@ -14,15 +14,19 @@
       .header-column {{"Birthday"}}
       .header-column {{"Salary"}}
       .header-column {{"Address"}}
-    .body-row(v-for="(data, index) in list" :key="`Key${index}`")
-      .body-column
-        el-input(v-model="data.Name" @input="status.isChange = true")
-      .body-column
-        el-date-picker.datepicker-style(v-model="data.DateOfBirth" @change="status.isChange = true")
-      .body-column
-        el-slider.salary-style(v-model="data.Salary" :min="0" :max="100000" @change="status.isChange = true")
-      .body-column
-        el-input(v-model="data.Address" @input="status.isChange = true")
+    el-form.body-row(v-for="(data, index) in list" :key="`Key${index}`" :model="data" :rules="rules" ref="ruleForm")
+      el-form-item(prop="Name")
+        .body-column
+          el-input(v-model="data.Name" @input="status.isChange = true")
+      el-form-item(prop="DateOfBirth")
+        .body-column
+          el-date-picker.datepicker-style(v-model="data.DateOfBirth" :editable="false" @change="status.isChange = true")
+      el-form-item(prop="Salary")
+        .body-column
+          el-slider.salary-style(v-model="data.Salary" :min="0" :max="100000" @change="status.isChange = true")
+      el-form-item(prop="Address")
+        .body-column
+          el-input(v-model="data.Address" @input="status.isChange = true")
     .no-data(v-if="list.length === 0") {{"查無資料"}}
 </template>
 
@@ -50,6 +54,26 @@ export default {
           Address: "",
         },
       ],
+      rules: {
+        Name: [{ required: true, message: "請輸入名稱", trigger: "change" }],
+        DateOfBirth: [
+          {
+            required: true,
+            message: "請輸入生日",
+            trigger: "change",
+          },
+        ],
+        Salary: [
+          {
+            trigger: "change",
+            validator: (rule, value, callback) => {
+              if (value === 0) callback(new Error("數值需大於0"));
+              callback();
+            },
+          },
+        ],
+        Address: [{ required: true, message: "請輸入地址", trigger: "change" }],
+      },
     };
   },
   methods: {
@@ -66,6 +90,15 @@ export default {
 
     // Save List
     HandleSave: debounce(async function () {
+      let validateResult = true;
+      for (let i = 0; i < this.$refs.ruleForm.length; i++) {
+        await this.$refs.ruleForm[i].validate((valid) => {
+          if (!valid) {
+            validateResult = false;
+          }
+        });
+      }
+      if (!validateResult) return;
       for (const data of this.list) {
         data.DateOfBirth = this.$utils.DayToRfc3339(data.DateOfBirth);
       }
@@ -162,7 +195,7 @@ export default {
   }
   .table-area {
     display: grid;
-    grid-auto-rows: 60px;
+    grid-auto-rows: auto;
     .t-header,
     .body-row {
       display: grid;
@@ -176,6 +209,7 @@ export default {
       display: flex;
       justify-content: flex-start;
       align-items: center;
+      margin-top: 10px;
     }
     .header-column {
       font-size: 20px;

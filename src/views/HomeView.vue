@@ -197,5 +197,20 @@ export default {
   .datepicker-style {
     width: 100%;
   }
+  ::v-deep .el-button--primary {
+    background-color: #0c6efe;
+  }
+  ::v-deep .el-button--success {
+    background-color: #148756;
+  }
+  ::v-deep .el-button--danger {
+    background-color: #de3446;
+  }
+  ::v-deep .el-slider__button {
+    background-color: #0075ff;
+  }
+  ::v-deep .is-disabled {
+    opacity: 0.6;
+  }
 }
 </style>

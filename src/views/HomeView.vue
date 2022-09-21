@@ -79,7 +79,6 @@ export default {
   methods: {
     // 處理新增
     HandleAdd: debounce(function () {
-      console.log(11, this.list);
       this.list.unshift({
         Name: "",
         DateOfBirth: "",
@@ -122,6 +121,7 @@ export default {
             type: "success",
           });
           this.status.isChange = false;
+          this.HandleUpdata(); // re-read
         })
         .catch((err) => {
           this.$message.error(`錯誤提示: ${err.response.data.title}`);
